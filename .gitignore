@@ -1,0 +1,21 @@
+cat > .gitignore << 'EOF'
+# Dependencies
+node_modules/
+client/node_modules/
+
+# Environment variables (contains DATABASE_URL, secrets, etc.)
+.env
+.env.local
+
+# SQLite database file — this is generated data, not source
+dev.db
+dev.db-journal
+
+# Vite build output
+client/dist/
+
+# Editor/OS cruft
+.DS_Store
+*.log
+npm-debug.log*
+EOF
