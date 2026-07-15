@@ -1,9 +1,0 @@
--- CreateTable
-CREATE TABLE "Order" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "partName" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'PENDING',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
-);
