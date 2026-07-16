@@ -2,7 +2,8 @@
 CREATE TABLE "Part" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "partNumber" TEXT NOT NULL,
-    "name" TEXT NOT NULL
+    "name" TEXT NOT NULL,
+    "price" REAL NOT NULL
 );
 
 -- CreateTable

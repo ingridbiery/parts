@@ -7,7 +7,7 @@ export const GET_ORDERS = gql`
       orderedAmount
       status
       createdAt
-      part { partNumber name }
+      part { partNumber name price }
       contractor { id name }
     }
   }
@@ -23,6 +23,7 @@ export const GET_PARTS = gql`
       id
       partNumber
       name
+      price
       inventory {
         quantity
       }
@@ -35,7 +36,7 @@ export const CREATE_ORDER = gql`
   mutation CreateOrder($partId: Int!, $orderedAmount: Int!, $contractorId: Int!) {
     createOrder(partId: $partId, orderedAmount: $orderedAmount, contractorId: $contractorId) {
       id orderedAmount status
-      part { partNumber name }
+      part { partNumber name price }
       contractor { id name }
     }
   }
@@ -53,7 +54,7 @@ export const ORDER_CREATED = gql`
   subscription {
     orderCreated {
       id orderedAmount status
-      part { partNumber name }
+      part { partNumber name price }
       contractor { id name }
     }
   }
@@ -63,7 +64,7 @@ export const ORDER_UPDATED = gql`
   subscription {
     orderUpdated {
       id status
-      part { partNumber name }
+      part { partNumber name price }
       contractor { id name }
     }
   }

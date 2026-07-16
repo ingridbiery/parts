@@ -10,16 +10,16 @@ const prisma = new PrismaClient({ adapter })
 
 async function main() {
   const parts = [
-    { partNumber: 'PN-1001', name: 'Dilithium Crystal Housing', quantity: 150 },
-    { partNumber: 'PN-1002', name: 'Warp Core Assembly', quantity: 10 },
-    { partNumber: 'PN-1003', name: 'Antimatter Injector', quantity: 500 },
-    { partNumber: 'PN-1004', name: 'Plasma Conduit', quantity: 250 },
-    { partNumber: 'PN-1005', name: 'Electro-Plasma System Relay', quantity: 1000 },
-    { partNumber: 'PN-1006', name: 'Impulse Drive Coil', quantity: 50 },
-    { partNumber: 'PN-1007', name: 'Matter/Antimatter Reaction Chamber', quantity: 20 },
-    { partNumber: 'PN-1008', name: 'Isolienar Chip', quantity: 350 },
-    { partNumber: 'PN-1009', name: 'Biofilter Unit', quantity: 200 },
-    { partNumber: 'PN-1010', name: 'Stem Bolt (Box of 100)', quantity: 80 },
+    { partNumber: 'PN-1001', name: 'Dilithium Crystal Housing', quantity: 150, price: 10.99 },
+    { partNumber: 'PN-1002', name: 'Warp Core Assembly', quantity: 10, price: 1000.0 },
+    { partNumber: 'PN-1003', name: 'Antimatter Injector', quantity: 500, price: 29.98 },
+    { partNumber: 'PN-1004', name: 'Plasma Conduit', quantity: 250, price: 48.75 },
+    { partNumber: 'PN-1005', name: 'Electro-Plasma System Relay', quantity: 1000, price: 1.99 },
+    { partNumber: 'PN-1006', name: 'Impulse Drive Coil', quantity: 50, price: 499.99 },
+    { partNumber: 'PN-1007', name: 'Matter/Antimatter Reaction Chamber', quantity: 20, price: 1200.00 },
+    { partNumber: 'PN-1008', name: 'Isolinear Chip', quantity: 350, price: 25.49 },
+    { partNumber: 'PN-1009', name: 'Biofilter Unit', quantity: 200, price: 19.98 },
+    { partNumber: 'PN-1010', name: 'Stem Bolt (Box of 100)', quantity: 80, price: 80.99 },
   ]
 
   const createdParts = []
@@ -28,6 +28,7 @@ async function main() {
       data: {
         partNumber: p.partNumber,
         name: p.name,
+        price: p.price,
         inventory: { create: { quantity: p.quantity } },
       },
     })

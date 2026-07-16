@@ -53,6 +53,7 @@ export default function DistributorOrdersView() {
             <th>Contractor</th>
             <th>Item</th>
             <th>Amount</th>
+            <th>Cost</th>
             <th>Created</th>
             <th>Advance</th>
           </tr>
@@ -64,6 +65,7 @@ export default function DistributorOrdersView() {
               <td>{o.contractor.name}</td>
               <td>{o.part.name}</td>
               <td>{o.orderedAmount}</td>
+              <td>${(o.part.price * o.orderedAmount).toFixed(2)}</td>
               <td>{new Date(o.createdAt).toLocaleString()}</td>
               <td>
                 {NEXT_STATUS[o.status] && (

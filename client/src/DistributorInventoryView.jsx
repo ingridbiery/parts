@@ -34,6 +34,7 @@ export default function DistributorInventoryView() {
           <tr>
             <th>Name</th>
             <th>Part Number</th>
+            <th>Cost</th>
             <th>Quantity</th>
           </tr>
         </thead>
@@ -42,6 +43,7 @@ export default function DistributorInventoryView() {
             <tr key={p.id}>
               <td>{p.name}</td>
               <td>{p.partNumber}</td>
+              <td>${p.price.toFixed(2)}</td>
               <td>{p.inventory?.quantity ?? 0}</td>
             </tr>
           ))}

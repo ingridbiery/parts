@@ -52,7 +52,7 @@ export default function ContractorView() {
             <select value={partId} onChange={(e) => setPartId(e.target.value)} required>
               <option value="">-- select part --</option>
               {partsData?.parts.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
+                <option key={p.id} value={p.id}>{p.name} — ${p.price.toFixed(2)}</option>
               ))}
             </select>
             <input type="number" min="1" value={orderedAmount} onChange={(e) => setOrderedAmount(e.target.value)} />
@@ -65,7 +65,9 @@ export default function ContractorView() {
           ) : (
             <ul>
               {data?.orders.map((o) => (
-                <li key={o.id}>{o.part.name} x{o.orderedAmount} — {o.status}</li>
+                <li key={o.id}>
+                  {o.part.name} x {o.orderedAmount} — {o.status} — ${(o.part.price * o.orderedAmount).toFixed(2)}
+                </li>
               ))}
             </ul>
           )}

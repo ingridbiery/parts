@@ -11,6 +11,7 @@ const typeDefs = /* GraphQL */ `
     id: Int!
     partNumber: String!
     name: String!
+    price: Float!
     inventory: Inventory
   }
 
