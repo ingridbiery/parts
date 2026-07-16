@@ -4,6 +4,8 @@ const { ORDER_STATUSES } = require('./orderStatus')
 const pubSub = createPubSub()
 
 const typeDefs = /* GraphQL */ `
+  scalar DateTime
+  
   type Part {
     id: Int!
     partNumber: String!
@@ -25,7 +27,7 @@ const typeDefs = /* GraphQL */ `
     id: Int!
     orderedAmount: Int!
     status: String!
-    createdAt: String!
+    createdAt: DateTime!
     part: Part!
     contractor: Contractor!
   }
@@ -49,6 +51,11 @@ const typeDefs = /* GraphQL */ `
 
 function makeResolvers(prisma) {
   return {
+    DateTime: {
+      serialize(value) {
+        return value instanceof Date ? value.toISOString() : value
+      }
+    },
     Query: {
       parts: () => prisma.part.findMany({ include: { inventory: true } }),
       contractors: () => prisma.contractor.findMany(),
