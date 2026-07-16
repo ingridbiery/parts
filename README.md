@@ -13,8 +13,8 @@ I created a very basic database schema that could handle inventory and orders
 * Contractor: id, name
 * Order: id, amount, status (PENDING< PROCESSING, SHIPPING, ARRIVED), contractor, part, createdAt, updatedAt
 
-The contractor will want to see their orders, with instant update.
-The distributor will want to see all orders with the ability to update their status. The distributor can also see all parts and the remaining inventory.
+The contractor will want to see their orders, with instant update when the status changes.
+The distributor will want to see all orders with instant update when an order is placed. The distributor also has the ability to update order status. The distributor can also see all parts and the amount.
 
 Error cases of not selecting an item to order, or entering a negative number, 0, or a decimal are handled with a tooltip message (I'm not sure if that's the correct terminology). If the server determines that the order is for more than there is stock, an error message will appear on the client view.
 
