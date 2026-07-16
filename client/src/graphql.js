@@ -18,8 +18,18 @@ export const GET_CONTRACTORS = gql`
 `
 
 export const GET_PARTS = gql`
-  query { parts { id partNumber name } }
+  query {
+    parts {
+      id
+      partNumber
+      name
+      inventory {
+        quantity
+      }
+    }
+  }
 `
+
 
 export const CREATE_ORDER = gql`
   mutation CreateOrder($partId: Int!, $orderedAmount: Int!, $contractorId: Int!) {

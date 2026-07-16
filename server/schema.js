@@ -1,4 +1,5 @@
 const { createPubSub } = require('graphql-yoga')
+const { GraphQLError } = require('graphql')
 const { ORDER_STATUSES } = require('./orderStatus')
 
 const pubSub = createPubSub()
@@ -70,12 +71,12 @@ function makeResolvers(prisma) {
     Mutation: {
       createOrder: async (_, { partId, orderedAmount, contractorId }) => {
         if (orderedAmount <= 0) {
-          throw new Error('orderedAmount must be greater than 0')
+          throw new GraphQLError('orderedAmount must be greater than 0')
         }
 
         const inventory = await prisma.inventory.findUnique({ where: { partId } })
         if (!inventory || inventory.quantity < orderedAmount) {
-          throw new Error('Not enough inventory to place this order')
+          throw new GraphQLError('Not enough inventory to place this order')
         }
 
         const order = await prisma.order.create({

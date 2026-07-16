@@ -20,11 +20,17 @@ export default function ContractorView() {
 
   const submit = async (e) => {
     e.preventDefault()
-    await createOrder({
-      variables: { partId: Number(partId), orderedAmount: Number(orderedAmount), contractorId },
-    })
-    setPartId('')
-    setOrderedAmount(1)
+    try {
+      await createOrder({
+        variables: { partId: Number(partId), orderedAmount: Number(orderedAmount), contractorId },
+      })
+      setPartId('')
+      setOrderedAmount(1)
+    } catch (err) {
+      // Intentionally empty — useMutation's `error` state below already
+      // captures this and renders it. We just need to stop the throw
+      // from propagating as an unhandled rejection.
+    }
   }
 
   return (
