@@ -1,13 +1,32 @@
 import { gql } from '@apollo/client'
 
 export const GET_ORDERS = gql`
-  query { orders { id partName quantity status createdAt } }
+  query GetOrders($contractorId: Int) {
+    orders(contractorId: $contractorId) {
+      id
+      orderedAmount
+      status
+      createdAt
+      part { partNumber name }
+      contractor { id name }
+    }
+  }
+`
+
+export const GET_CONTRACTORS = gql`
+  query { contractors { id name } }
+`
+
+export const GET_PARTS = gql`
+  query { parts { id partNumber name } }
 `
 
 export const CREATE_ORDER = gql`
-  mutation CreateOrder($partName: String!, $quantity: Int!) {
-    createOrder(partName: $partName, quantity: $quantity) {
-      id partName quantity status createdAt
+  mutation CreateOrder($partId: Int!, $orderedAmount: Int!, $contractorId: Int!) {
+    createOrder(partId: $partId, orderedAmount: $orderedAmount, contractorId: $contractorId) {
+      id orderedAmount status
+      part { partNumber name }
+      contractor { id name }
     }
   }
 `
@@ -21,9 +40,21 @@ export const UPDATE_ORDER_STATUS = gql`
 `
 
 export const ORDER_CREATED = gql`
-  subscription { orderCreated { id partName quantity status createdAt } }
+  subscription {
+    orderCreated {
+      id orderedAmount status
+      part { partNumber name }
+      contractor { id name }
+    }
+  }
 `
 
 export const ORDER_UPDATED = gql`
-  subscription { orderUpdated { id status } }
+  subscription {
+    orderUpdated {
+      id status
+      part { partNumber name }
+      contractor { id name }
+    }
+  }
 `

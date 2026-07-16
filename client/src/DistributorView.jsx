@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useSubscription } from '@apollo/client/react'
 import { GET_ORDERS, UPDATE_ORDER_STATUS, ORDER_CREATED, ORDER_UPDATED } from './graphql'
 
-const NEXT_STATUS = { PENDING: 'ACCEPTED', ACCEPTED: 'SHIPPED', SHIPPED: 'DELIVERED' }
+const NEXT_STATUS = { PENDING: 'PROCESSING', PROCESSING: 'SHIPPING', SHIPPING: 'ARRIVED' }
 
 export default function DistributorView() {
-  const { data, loading, refetch } = useQuery(GET_ORDERS)
+  const { data, loading, refetch } = useQuery(GET_ORDERS, { variables: { contractorId: null } })
   const [updateStatus] = useMutation(UPDATE_ORDER_STATUS)
 
   useSubscription(ORDER_CREATED, { onData: () => refetch() })
@@ -18,7 +18,7 @@ export default function DistributorView() {
       <ul>
         {data.orders.map((o) => (
           <li key={o.id}>
-            {o.partName} x{o.quantity} — {o.status}
+            {o.contractor.name}: {o.part.name} x{o.orderedAmount} — {o.status}
             {NEXT_STATUS[o.status] && (
               <button onClick={() => updateStatus({ variables: { id: o.id, status: NEXT_STATUS[o.status] } })}>
                 Mark {NEXT_STATUS[o.status]}

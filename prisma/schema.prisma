@@ -21,12 +21,20 @@ model Inventory {
   partId     Int    @unique
 }
 
+model Contractor {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  orders Order[]
+}
+
 model Order {
-  id            Int      @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   orderedAmount Int
-  status        String   @default("PENDING") // PENDING, PROCESSING, SHIPPING, ARRIVED
-  part          Part     @relation(fields: [partId], references: [id])
+  status        String     @default("PENDING")
+  contractor    Contractor @relation(fields: [contractorId], references: [id])
+  contractorId  Int
+  part          Part       @relation(fields: [partId], references: [id])
   partId        Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }

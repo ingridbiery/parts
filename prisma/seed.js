@@ -34,22 +34,31 @@ async function main() {
     createdParts.push(part)
   }
 
+  const contractorNames = ['Contractor-A', 'Contractor-B', 'Contractor-C']
+  const createdContractors = []
+  for (const name of contractorNames) {
+    const contractor = await prisma.contractor.create({ data: { name } })
+    createdContractors.push(contractor)
+  }
+
   let orderCount = 0
   for (const [index, part] of createdParts.entries()) {
     const status = ORDER_STATUSES[index % ORDER_STATUSES.length]
     const orderedAmount = 10 + index * 5
+    const contractor = createdContractors[index % createdContractors.length]
 
     await prisma.order.create({
       data: {
         partId: part.id,
         orderedAmount,
         status,
+        contractorId: contractor.id
       },
     })
     orderCount++
   }
 
-console.log(`Seed complete: ${createdParts.length} parts, ${orderCount} orders.`)
+  console.log(`Seed complete: ${createdParts.length} parts, ${orderCount} orders.`)
 }
 
 main()

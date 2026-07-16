@@ -1,38 +1,70 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useSubscription } from '@apollo/client/react'
-import { GET_ORDERS, CREATE_ORDER, ORDER_CREATED, ORDER_UPDATED } from './graphql'
+import { GET_ORDERS, GET_CONTRACTORS, GET_PARTS, CREATE_ORDER, ORDER_CREATED, ORDER_UPDATED } from './graphql'
 
 export default function ContractorView() {
-  const { data, loading, refetch } = useQuery(GET_ORDERS)
-  const [createOrder] = useMutation(CREATE_ORDER)
-  const [partName, setPartName] = useState('')
-  const [quantity, setQuantity] = useState(1)
+  const { data: contractorsData } = useQuery(GET_CONTRACTORS)
+  const { data: partsData } = useQuery(GET_PARTS)
+  const [contractorId, setContractorId] = useState(null)
 
-  useSubscription(ORDER_CREATED, { onData: () => refetch() })
-  useSubscription(ORDER_UPDATED, { onData: () => refetch() })
+  const { data, loading, refetch } = useQuery(GET_ORDERS, {
+    variables: { contractorId },
+    skip: !contractorId,
+  })
+  const [createOrder, { error }] = useMutation(CREATE_ORDER)
+  const [partId, setPartId] = useState('')
+  const [orderedAmount, setOrderedAmount] = useState(1)
+
+  useSubscription(ORDER_CREATED, { onData: () => contractorId && refetch() })
+  useSubscription(ORDER_UPDATED, { onData: () => contractorId && refetch() })
 
   const submit = async (e) => {
     e.preventDefault()
-    await createOrder({ variables: { partName, quantity: Number(quantity) } })
-    setPartName('')
-    setQuantity(1)
+    await createOrder({
+      variables: { partId: Number(partId), orderedAmount: Number(orderedAmount), contractorId },
+    })
+    setPartId('')
+    setOrderedAmount(1)
   }
-
-  if (loading) return <p>Loading...</p>
 
   return (
     <div>
       <h2>Contractor View</h2>
-      <form onSubmit={submit}>
-        <input value={partName} onChange={(e) => setPartName(e.target.value)} placeholder="Part name" required />
-        <input type="number" min="1" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-        <button type="submit">Request Order</button>
-      </form>
-      <ul>
-        {data.orders.map((o) => (
-          <li key={o.id}>{o.partName} x{o.quantity} — {o.status}</li>
-        ))}
-      </ul>
+      <label>
+        I am:{' '}
+        <select value={contractorId ?? ''} onChange={(e) => setContractorId(Number(e.target.value))}>
+          <option value="">-- select contractor --</option>
+          {contractorsData?.contractors.map((c) => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
+      </label>
+
+      {contractorId && (
+        <>
+          <form onSubmit={submit}>
+            <select value={partId} onChange={(e) => setPartId(e.target.value)} required>
+              <option value="">-- select part --</option>
+              {partsData?.parts.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+            <input type="number" min="1" value={orderedAmount} onChange={(e) => setOrderedAmount(e.target.value)} />
+            <button type="submit">Request Order</button>
+          </form>
+          {error && <p style={{ color: 'red' }}>{error.message}</p>}
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <ul>
+              {data?.orders.map((o) => (
+                <li key={o.id}>{o.part.name} x{o.orderedAmount} — {o.status}</li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
     </div>
   )
 }
